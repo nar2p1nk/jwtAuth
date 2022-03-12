@@ -33,7 +33,7 @@ function authUser(username,password){
     }
 }
 
-module.exports = createUser,authUser
+module.exports = {createUser,authUser}
 
 //createUser('emilia', 'galangPalad')
 //console.log(createUser('hillock', 'eatass'))
