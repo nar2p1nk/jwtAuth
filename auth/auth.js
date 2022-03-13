@@ -27,7 +27,8 @@ passport.use('signup', new localStrategy(
         usernameField:'username',
         passwordField:'passport'
     },
-    async (username,password,done)=>{
+    (username,password,done)=>{
+        console.log('in function')
         try{
             model.createUser(username,password)
             const getUser = db.prepare(`

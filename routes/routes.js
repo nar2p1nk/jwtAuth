@@ -43,7 +43,9 @@ router.post(
                 }catch(error){return next(error)}
             }
     )
-    },(req,res,next)
+    },(req,res,next)=>{
+        res.json({user:req.user})
+    }
 )
 
 module.exports = router;
