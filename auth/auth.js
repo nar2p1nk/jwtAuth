@@ -1,9 +1,24 @@
 const passport = require('passport');
 const localStrategy = require('passport-local').Strategy;
+const JWTStrategy = require('passport-jwt').Strategy;
+const extractJWT = require('passport-jwt').ExtractJwt;
 const model = require('../model/model');
 const sqlite = require('better-sqlite3');
 const bcrypt = require('bcrypt');
 const db = new sqlite('../users.db');
+
+passport.use(
+    new JWTStrategy(
+        {
+            secretOrKey:'TOP_SECRET',
+            jwtFromRequest: extractJWT.fromUrlQueryParameter('secret_token')
+        },
+        async(token,done)=>{
+            try{return done(null, token.user)}
+            catch(error){done(error)}
+        }
+    )
+)
 
 
 
