@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "enemy",
+    "password": null,
+    "database": "secure_node",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "enemy",
+    "password": null,
+    "database": "secure_node",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "production": {
+    "username": "enemy",
+    "password": null,
+    "database": "secure_node",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  }
+}
