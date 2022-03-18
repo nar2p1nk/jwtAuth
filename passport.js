@@ -1,8 +1,8 @@
 const passport = require('passport');
 const localStrategy = require('passport-local').Strategy;
-const sqlite = require('better-sqlite3');
+const sqlite = require('sqlite3');
 const bcrypt = require('bcrypt')
-const db = new sqlite('users.db');
+const db = new sqlite.Database('users.db');
 const passportJWT = require('passport-jwt');
 const JWTStrategy = passportJWT.Strategy;
 const extractJWT = passportJWT.ExtractJwt;
@@ -20,26 +20,26 @@ passport.use(new JWTStrategy({
     }
 ))
 
-
 passport.use(new localStrategy({
     usernameField:'username',
     passwordField:'password'
 },
     function(username,password,done){
-       const user = db.prepare(`
-        SELECT * FROM user WHERE username = ?`).get(username)
-        if(!user){
-            return done(null,false,{message:'there is no user by that name'})
+        db.get(`SELECT * FROM user WHERE name = ?`,[username],async (err,row) =>{
+
+        if(row == null){
+            return done(null,false,{message:'no user found'})
         }
-        else{
-            if(bcrypt.compareSync(password, user.password)){
-                return(null,user,{message: 'login successful'})
+        try{
+            if(await bcrypt.compare(password,row.password)){
+                return done(null,row)
             }
-            else return(null,false,{message:'password is incorrect'})
+            else{ return done(null,false,{message:'incorrect password'}) }
         }
+        catch(e){return done(e)}
+    } )
     }
 ))
-
 
 //CreateUser('billy','animelover99')
 
