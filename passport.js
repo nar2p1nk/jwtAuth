@@ -10,13 +10,20 @@ const extractJWT = passportJWT.ExtractJwt;
 
 passport.use(new JWTStrategy({
     jwtFromRequest: extractJWT.fromAuthHeaderAsBearerToken(),
-    secretOrKey:'gila'
+//    jwtFromRequest:extractJWT.fromAuthHeader(),
+    secretOrKey:'gila',
+    passReqToCallback:true,
     },
-    function(jwtPayload,done){
-        const user = db.prepare(`
+    function(req,jwtPayload,done){
+       const user = db.prepare(`
         SELECT * FROM user WHERE id = ?`).get(jwtPayload.id);
-        return done(null, user)
-
+        if(user){
+            req.user = user;
+            done(null,user)
+        }
+        else{
+            done(null,false)
+        }
     }
 ))
 
