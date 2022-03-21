@@ -72,5 +72,5 @@ function ifUser(username,password){
 
 //createUser('emilia', 'amelia')
 
-module.exports = {createUser,createTodo,ifUser}
+module.exports = {createUser,findUser,createTodo,findTodo,ifUser}
 
