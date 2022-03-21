@@ -1,5 +1,7 @@
 const passport = require('passport');
 const localStrategy = require('passport-local').Strategy;
+const JWTstrategy = require('passport-jwt').Strategy;
+const extractJWT = require('passport-jwt').ExtractJwt;
 const userC = require('./model');
 const bcrypt = require('bcrypt');
 
@@ -14,7 +16,7 @@ passport.use(
             try{
                 const user = userC.createUser(username,password);
 
-                return done(null,user);
+                return done(null,user,{message:'signup successful'});
             }
             catch(err){done(err)}
         }
@@ -47,3 +49,22 @@ passport.use(
         }
     )
 )
+
+
+passport.use(
+    new JWTstrategy(
+        {
+            secretOrKey:'gila',
+            jwtFromRequest: extractJWT.fromUrlQueryParameter('gila')
+        },
+        async (token,done)=>{
+            try{
+                return done(null,token.user);
+            }
+            catch(err){done(err)}
+        }
+    )
+)
+
+
+
