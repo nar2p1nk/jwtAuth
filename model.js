@@ -24,16 +24,37 @@ function createUser(username,password){
     user(username,password) VALUES(?,?)`).run(username,hashedPassword)
 }
 
+function findUser(username){
+    const user = db.prepare(`
+    SELECT * FROM user WHERE username = ?`).get(username);
+    if(!user){
+        console.log('there is no user by that name')
+        return false
+    }
+    else{return user}
+}
+
 function createTodo(todo,userId){
     db.prepare(`INSERT INTO todo(todo,todoUser) 
     VALUES(?,?)`).run(todo,userId)
+}
+
+
+function findTodo(todo){
+    const todo2 = db.prepare(`
+    SELECT * FROM todo WHERE todo = ?`).get(todo);
+    if(!todo2){
+        console.log('there is no user by that name')
+        return false
+    }
+    else{return todo2}
 }
 
 function ifUser(username,password){
     const user = db.prepare(`SELECT * FROM user
     WHERE username = ?`).get(username)
     if(!user){
-        console.log('there is not user by that name')
+        console.log('there is no user by that name')
         return false
     }
     else{
@@ -51,4 +72,5 @@ function ifUser(username,password){
 
 //createUser('emilia', 'amelia')
 
-ifUser('emilia', 'amelia')
+module.exports = {createUser,createTodo,ifUser}
+
