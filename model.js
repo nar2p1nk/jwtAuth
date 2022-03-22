@@ -24,9 +24,19 @@ function createUser(username,password){
     user(username,password) VALUES(?,?)`).run(username,hashedPassword)
 }
 
-function findUser(username){
+function findUserByUsername(username){
     const user = db.prepare(`
     SELECT * FROM user WHERE username = ?`).get(username);
+    if(!user){
+        console.log('there is no user by that name')
+        return false
+    }
+    else{return user}
+}
+
+function findUserById(id){
+    const user = db.prepare(`
+    SELECT * FROM user WHERE id = ?`).get(id);
     if(!user){
         console.log('there is no user by that name')
         return false
@@ -72,5 +82,12 @@ function ifUser(username,password){
 
 //createUser('emilia', 'amelia')
 
-module.exports = {createUser,findUser,createTodo,findTodo,ifUser}
+module.exports = {
+    createUser,
+    findUserByUsername,
+    findUserById,
+    createTodo,
+    findTodo,
+    ifUser
+}
 

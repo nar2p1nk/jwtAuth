@@ -17,7 +17,7 @@ app.use(bodyParser.json())
 app.use('/',routes)
 
 app.use('/user',
-//    passport.authenticate('jwt',{session:false}),
+    passport.authenticate('jwt',{session:false}),
     secureRoutes);
 
 app.get('/',(req,res)=>{

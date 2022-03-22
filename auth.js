@@ -4,7 +4,8 @@ const JWTstrategy = require('passport-jwt').Strategy;
 const extractJWT = require('passport-jwt').ExtractJwt;
 const userC = require('./model');
 const bcrypt = require('bcrypt');
-
+const jwtSimple = require('jwt-simple');
+const jwt = require('jsonwebtoken');
 //passport.use(
 //    'signup',
 //    new localStrategy(
@@ -36,7 +37,7 @@ passport.use(
         },
         (username,password,done)=>{
             try{
-                const user = userC.findUser(username)
+                const user = userC.findUserByUsername(username)
                 if(!user){
                     return done(null,false,{message:'no user found'})
                 }
@@ -53,20 +54,20 @@ passport.use(
 )
 
 
-const opts = {
-    secretOrKey:'gila',
-    jwtFromRequest: extractJWT.fromAuthHeaderAsBearerToken(),
-}
-
 passport.use(new JWTstrategy(
-    opts,
-        (jwt_payload,done)=>{
-            console.log('berries')
-            const user = userC.findUser(jwt.user.username)
+    {
+        secretOrKey:'gila',
+        jwtFromRequest: extractJWT.fromAuthHeaderAsBearerToken(),
+        passReqToCallback:true
+    },
+        (payload,done)=>{
+            console.log(payload.sub)
+            const user = userC.findUserById(payload.user.id)
+            console.log('jwt after')
             console.log(user)
-            if(err){return done(err,false)}
+//            if(err){return done(err,false)}
             if(user){return done(null,user)}
-            else{return done(null,false)}
+//            else{return done(null,false)}
             
         }
     )

@@ -36,12 +36,9 @@ router.post(
                         {session:false},
                          (error) =>{
                             if(error) return next(error);
-
+                             console.log(user.id,user.username)
                             const body = {id:user.id,username:user.username};
-                            const token = jwt.sign({user:body},'gila',{
-                                expiresIn:'10m'
-                            });
-
+                            const token = jwt.sign({user:body},'gila');
                             return res.json({token});
                         }
                     );
