@@ -1,20 +1,23 @@
 const express = require('express');
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
-
+const userC = require('./model');
 const router = express.Router();
 
-
-router.post(
-    '/signup',
-    passport.authenticate('signup',{session:false}),
-    (req,res)=>{
-        res.json({
-            message:'Signup successful',
-            user:req.user
-        })
+router.post('/signup',(req,res)=>{
+    const username = req.body.username;
+    const password = req.body.password;
+    if(!username){res.json({error:'no username found'})}
+    if(!password){res.json({error:'no password found'})}
+    else{
+    userC.createUser(req.body.username,req.body.password)
+    res.json({
+        username:req.body.username,
+        message:'user created'
+    })
     }
-)
+}
+);
 
 router.post(
     '/login',
@@ -25,7 +28,8 @@ router.post(
                 try{
                     if(!user){
                         const error = new Error('An error has occurred')
-                        return next('ajjjj')
+                        res.json({message:info.message})
+                        return next(error)
                     }
                     req.login(
                         user,
@@ -33,8 +37,10 @@ router.post(
                          (error) =>{
                             if(error) return next(error);
 
-                            const body = {_id:user.id,username:user.username};
-                            const token = jwt.sign({user:body},'gila');
+                            const body = {id:user.id,username:user.username};
+                            const token = jwt.sign({user:body},'gila',{
+                                expiresIn:'10m'
+                            });
 
                             return res.json({token});
                         }

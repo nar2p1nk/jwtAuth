@@ -16,9 +16,13 @@ app.use(bodyParser.json())
 
 app.use('/',routes)
 
-app.use('/user',passport.authenticate('jwt',{session:false}), secureRoutes);
+app.use('/user',
+//    passport.authenticate('jwt',{session:false}),
+    secureRoutes);
 
-
+app.get('/',(req,res)=>{
+    res.json({server:'Ok'})
+})
 
 app.use((err,req,res,next)=>{
     res.status(err.status || 500);

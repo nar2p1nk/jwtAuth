@@ -5,24 +5,26 @@ const extractJWT = require('passport-jwt').ExtractJwt;
 const userC = require('./model');
 const bcrypt = require('bcrypt');
 
-passport.use(
-    'signup',
-    new localStrategy(
-        {
-            usernameField:'username',
-            passwordField:'password'
-        },
-         (username,password,done)=>{
-            try{
-                const user = userC.createUser(username,password);
-
-                return done(null,user,{message:'signup successful'});
-            }
-            catch(err){done(err)}
-        }
-    )
-
-)
+//passport.use(
+//    'signup',
+//    new localStrategy(
+//        {
+//            usernameField:'username',
+//            passwordField:'password'
+//        },
+//         (username,password,done)=>{
+//            try{
+//                const user = userC.createUser(username,password);
+//                //const user = {username:username,password:password}
+//                return done(null,user,{message:'signup successful'});
+//            }
+//            catch(err){
+//                console.log('an error has occured in auth signup')
+//                return done(null,err)}
+//        }
+//    )
+//
+//)
 
 
 passport.use(
@@ -51,17 +53,21 @@ passport.use(
 )
 
 
-passport.use(
-    new JWTstrategy(
-        {
-            secretOrKey:'gila',
-            jwtFromRequest: extractJWT.fromUrlQueryParameter('gila')
-        },
-        async (token,done)=>{
-            try{
-                return done(null,token.user);
-            }
-            catch(err){done(err)}
+const opts = {
+    secretOrKey:'gila',
+    jwtFromRequest: extractJWT.fromAuthHeaderAsBearerToken(),
+}
+
+passport.use(new JWTstrategy(
+    opts,
+        (jwt_payload,done)=>{
+            console.log('berries')
+            const user = userC.findUser(jwt.user.username)
+            console.log(user)
+            if(err){return done(err,false)}
+            if(user){return done(null,user)}
+            else{return done(null,false)}
+            
         }
     )
 )
