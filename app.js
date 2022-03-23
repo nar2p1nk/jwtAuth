@@ -4,6 +4,10 @@ const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
 const userC = require('./model');
 const express_jwt = require('express-jwt');
+const sqlite = require('better-sqlite3');
+
+const db = new sqlite('./todoWUser.db');
+
 require('./auth');
 
 const routes = require('./routes');
@@ -34,9 +38,18 @@ app.use('/user',
 //    authenticatejwt,
     secureRoutes);
 
-app.get('/',(req,res)=>{
-    res.json({server:req.query.token})
+app.get('/todo',(req,res)=>{
+    res.redirect(`http://127.0.0.1:8000/todo/${req.user.user.id}`)
 })
+
+app.get('/todo/:userId',(req,res)=>{
+   const todos = db.prepare(`SELECT * FROM todo WHERE todoUser = ?`)
+        .all(req.params.userId);
+    res.json({
+        todos:todos
+    })
+})
+
 
 function authenticatejwt(req,res,next){
         const user = userC.findUserById(req.user.user.id)
@@ -44,7 +57,10 @@ function authenticatejwt(req,res,next){
             console.log('no user found')
             res.sendStatus(401)
         }
-            next();
+    else{
+        console.log('user verified')
+        next();
+    }
         }
 
 

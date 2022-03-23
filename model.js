@@ -80,7 +80,7 @@ function ifUser(username,password){
     }
 }
 
-//createUser('emilia', 'amelia')
+createUser('emilia', 'amelia')
 
 module.exports = {
     createUser,
