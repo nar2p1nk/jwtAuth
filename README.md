@@ -22,16 +22,16 @@ a project to authenticate users using json web token with passport and expressjs
  
     this endpoint shows user their username as well as displaying
     their token(this endpoint is not accessible without the token)
+    
  ## post
+  note: all the POST request require a username and password
+ 
+ ### /signup
+ 
+    this endpoint makes new user
  
  ### /login
  
-    this endpoint requires:
-      
-      username
-      
-      password
-      
       the POST request essentially works by authenticating
       the username first with passportjs, if the username
       returns no user, an error will occur. If a user is found,
