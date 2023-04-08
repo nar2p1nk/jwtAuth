@@ -54,24 +54,26 @@ passport.use(
 )
 
 
-passport.use(new JWTstrategy(
-    {
-        secretOrKey:'gila',
-        jwtFromRequest: extractJWT.fromAuthHeaderAsBearerToken(),
-        passReqToCallback:true
-    },
-        (payload,done)=>{
-            console.log(payload.sub)
-            const user = userC.findUserById(payload.user.id)
-            console.log('jwt after')
-            console.log(user)
-//            if(err){return done(err,false)}
-            if(user){return done(null,user)}
-//            else{return done(null,false)}
-            
-        }
-    )
-)
+// jwtStrategy returns some weird object, use jsonwebtoken instead
+
+//passport.use(new JWTstrategy(
+//    {
+//        secretOrKey:'gila',
+//        jwtFromRequest: extractJWT.fromAuthHeaderAsBearerToken(),
+//        passReqToCallback:true
+//    },
+//        (payload,done)=>{
+//            console.log(payload.sub)
+//            const user = userC.findUserById(payload.user.id)
+//            console.log('jwt after')
+//            console.log(user)
+////            if(err){return done(err,false)}
+//            if(user){return done(null,user)}
+////            else{return done(null,false)}
+//            
+//        }
+//    )
+//)
 
 
 

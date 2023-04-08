@@ -39,7 +39,7 @@ router.post(
                              console.log(user.id,user.username)
                             const body = {id:user.id,username:user.username};
                             const token = jwt.sign({user:body},'gila');
-                            return res.json({token});
+                             return res.json({status:200,token});
                         }
                     );
                 }

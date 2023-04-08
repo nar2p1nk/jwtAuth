@@ -23,7 +23,7 @@ app.use('/',routes)
 app.use(express_jwt({secret:'gila',algorithms:['HS256']}))
 
 app.get('/protected',
-    authenticatejwt,
+//    authenticatejwt,
     (req,res)=>{
         res.json({
             status:200,
@@ -39,6 +39,7 @@ app.use('/user',
     secureRoutes);
 
 app.get('/todo',(req,res)=>{
+    console.log(req.user)
     res.redirect(`http://127.0.0.1:8000/todo/${req.user.user.id}`)
 })
 
